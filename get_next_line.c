@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2022/12/04 16:29:41 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2022/12/04 20:22:32 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,27 @@ t_list	*ft_lstnew(void *content)
 	new->next = NULL;
 	return (new);
 }
+void	ft_lstdelone(t_list *lst)
+{
+	if (!lst)
+		return ;
+	free(lst->content);
+	free(lst);
+}
+void	ft_lstclear(t_list **lst)
+{
+	t_list	*temp;
+
+	if (!lst)
+		return ;
+	while (*lst)
+	{
+		temp = (*lst)->next;
+		ft_lstdelone(*lst);
+		*lst = temp;
+	}
+	lst = NULL;
+}
 /*int		checknlorzero(char *str)
 {
 	int	i;
@@ -89,38 +110,67 @@ t_list	*ft_lstnew(void *content)
 		i++;
 	return (i);
 }*/
+int	postnl(char *buffer)
+{
+	int	i;
+
+	i = 0;
+	while (buffer[i] && buffer[i] != '\n')
+		i++;
+	if (buffer[i] == '\n' && i < BUFFER_SIZE - 1)
+		i++;
+	else
+		return (-1);
+	return (i);
+}
 int		ft_charcount_fd(int fd, t_list **hlst, t_list *lst)
 {
 	int	ct;
 	int	i;
 	int	check;
+	int	scndpass;
 	static char buffct[BUFFER_SIZE];
-
+//								static int nb = 1;
+//								printf("******%i : time in charcount******\n", nb++);
 	ct = 0;
 	check = 1;
-	while (check > 0)
+	scndpass = 0;
+	if (*buffct)
+		check = -42;
+//								printf("-- buffct = %s\n", buffct);
+	while (check > 0 || check == -42)
 	{
 		i = 0;
-		check = read(fd, buffct, BUFFER_SIZE);
-		if (check)
+		if (check == -42)
 		{
-			lst = ft_lstnew(buffct);
-										printf("%s", buffct);
+			i = postnl(buffct);
+			if (i >= 0)
+				scndpass = i;
+//								printf("-- buffct postnl = %s\n", &buffct[i]);
+//								printf("---- i = %i\n", i);
+			check = 1;
+		}
+		else 
+			check = read(fd, buffct, BUFFER_SIZE);
+		if (check && i >= 0)
+		{
+			lst = ft_lstnew(&buffct[i]);
+//									printf("%s", (char *) lst->content);
 			ft_lstadd_back(hlst, lst);
 			lst = lst->next;
 			while (buffct[i] && buffct[i] != '\n')
 				i++;
 			ct += i;
 			if (i < BUFFER_SIZE && (!buffct[i] || buffct[i] == '\n'))
-				return (ct);
+				return (ct - scndpass);
 		}
 	}
-	return (ct);
+	return (ct - scndpass);
 }
 char	*get_next_line(int fd)
 {
 	int		i[3];
-	char	*buffer;
+	static char	*buffer;
 	char	*lel;
 	t_list	*lst;
 	t_list	**hlst;
@@ -135,18 +185,19 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return (NULL);
 	lst = *hlst;
-							printf("i[0] = %i\n", i[0]);
+//							printf("i[0] = %i\n", i[0]);
 	while (i[2] < i[0])
 	{
 		i[1] = 0;
 		lel = (char *) lst->content;
-		while (i[1] < BUFFER_SIZE && i[2] < i[0])
+		while (i[1] < BUFFER_SIZE && i[2] < i[0] && lel[i[1]])
 			buffer[i[2]++] = lel[i[1]++];
 					//		printf("-----str = %s------\n", buffer);
 					//		printf("lst->next = %p -- lst->content = %s\n", lst, lel);
 		lst = lst->next;
 					//		printf("end of while (i[2] = %i)\n", i[2]);
 	}
+	ft_lstclear(hlst);
 	return (buffer);
 }
 
