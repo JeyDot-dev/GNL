@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2022/12/04 20:22:32 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2022/12/05 01:43:14 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,18 +185,22 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return (NULL);
 	lst = *hlst;
-//							printf("i[0] = %i\n", i[0]);
+							printf("i[0] = %i\n", i[0]);
 	while (i[2] < i[0])
 	{
 		i[1] = 0;
 		lel = (char *) lst->content;
 		while (i[1] < BUFFER_SIZE && i[2] < i[0] && lel[i[1]])
+		{
 			buffer[i[2]++] = lel[i[1]++];
-					//		printf("-----str = %s------\n", buffer);
-					//		printf("lst->next = %p -- lst->content = %s\n", lst, lel);
+		}
+//							printf("-----str = %s------\n", buffer);
+//							printf("lst->next = %p -- lst->content = %s\n", lst, lel);
 		lst = lst->next;
-					//		printf("end of while (i[2] = %i)\n", i[2]);
+//							printf("end of while (i[2] = %i)\n", i[2]);
 	}
+	return (buffer);
+							printf("Test avant de lstclear\n");
 	ft_lstclear(hlst);
 	return (buffer);
 }
