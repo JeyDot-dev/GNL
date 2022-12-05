@@ -4,14 +4,17 @@ int	main(void)
 {
 	int test;
 	test = open("filetest.txt", O_RDONLY);
-	printf("%s\n", get_next_line(test));
-	printf("%s\n", get_next_line(test));
-	printf("%s\n", get_next_line(test));
-	printf("%s\n", get_next_line(test));
-	printf("%s\n", get_next_line(test));
-	printf("%s\n", get_next_line(test));
-	printf("%s\n", get_next_line(test));
-	printf("%s\n", get_next_line(test));
-	printf("%s\n", get_next_line(test));
-	printf("%s\n", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
 }

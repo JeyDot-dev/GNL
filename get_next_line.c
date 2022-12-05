@@ -131,7 +131,7 @@ int		ft_charcount_fd(int fd, t_list **hlst, t_list *lst)
 	int	scndpass;
 	static char buffct[BUFFER_SIZE];
 //								static int nb = 1;
-//								printf("******%i : time in charcount******\n", nb++);
+//								printf("*********** %i : GNL CALL *********\n", nb++);
 	ct = 0;
 	check = 1;
 	scndpass = 0;
@@ -160,8 +160,10 @@ int		ft_charcount_fd(int fd, t_list **hlst, t_list *lst)
 			lst = lst->next;
 			while (buffct[i] && buffct[i] != '\n')
 				i++;
+			if (buffct[i] == '\n')
+				i++;
 			ct += i;
-			if (i < BUFFER_SIZE && (!buffct[i] || buffct[i] == '\n'))
+			if (i < BUFFER_SIZE && (!buffct[i] || buffct[i - 1] == '\n'))
 				return (ct - scndpass);
 		}
 	}
@@ -185,7 +187,7 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return (NULL);
 	lst = *hlst;
-							printf("i[0] = %i\n", i[0]);
+//							printf("i[0] = %i\n", i[0]);
 	while (i[2] < i[0])
 	{
 		i[1] = 0;
@@ -199,8 +201,7 @@ char	*get_next_line(int fd)
 		lst = lst->next;
 //							printf("end of while (i[2] = %i)\n", i[2]);
 	}
-	return (buffer);
-							printf("Test avant de lstclear\n");
+//							printf("Test avant de lstclear\n");
 	ft_lstclear(hlst);
 	return (buffer);
 }
