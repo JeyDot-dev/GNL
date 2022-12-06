@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2022/12/06 01:27:02 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2022/12/06 03:52:16 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,8 @@ void	ft_lstclear(t_list **lst)
 		i++;
 	return (i);
 }*/
-int	postnl(char *buffer)
+int	postnl(char *buffer, int i)
 {
-	int	i;
-
-	i = 0;
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	if (buffer[i] == '\n' && i < BUFFER_SIZE - 1)
@@ -123,41 +120,45 @@ int	postnl(char *buffer)
 		return (-1);
 	return (i);
 }
-int	notfirst(void)
+/*int	notfirst(void)
 {
 	static int	i = -1;
 
 	return (++i);
-}
+}*/
 int		ft_charcount_fd(int fd, t_list **hlst, t_list *lst)
 {
 	int	ct;
 	int	i;
 	int	check;
-	int	scndpass;
+	static int	scndpass = 0;
 	static char buffct[BUFFER_SIZE];
 //								static int nb = 1;
 //								printf("*********** %i : GNL CALL *********\n", nb++);
 	ct = 0;
 	check = 1;
-	scndpass = 0;
-	if (notfirst() && *buffct)
-		check = -42;
+//								printf("----SCN = %i -----\n", scndpass);
 //								printf("-- buffct = %s\n", buffct);
-	while (check > 0 || check == -42)
+	while (check > 0)
 	{
 		i = 0;
-		if (check == -42)
+		if (scndpass > 0)
 		{
-			i = postnl(buffct);
-			if (i >= 0)
-				scndpass = i;
+//								printf("    IN    \n");
+			i = postnl(buffct, scndpass -1);
+			if (i < 0)
+				scndpass = 0;
+//			if (i >= 0)
+//				scndpass += i;
 //								printf("-- buffct postnl = %s\n", &buffct[i]);
-//								printf("---- i = %i\n", i);
 			check = 1;
+//								printf("----SCN = %i || i = %i\n", scndpass, i);
 		}
 		else 
+		{
+			scndpass = 0;
 			check = read(fd, buffct, BUFFER_SIZE);
+		}
 		if (check && i >= 0)
 		{
 			lst = ft_lstnew(&buffct[i]);
@@ -167,13 +168,19 @@ int		ft_charcount_fd(int fd, t_list **hlst, t_list *lst)
 			while (buffct[i] && buffct[i] != '\n')
 				i++;
 			if (buffct[i] == '\n')
-				i++;
-			ct += i;
-			if (i < BUFFER_SIZE && (!buffct[i] || buffct[i - 1] == '\n'))
-				return (ct - scndpass);
+				ct++;
+			ct += i - scndpass;
+			scndpass = 0;
+			if (i < BUFFER_SIZE && (!buffct[i] || buffct[i] == '\n'))
+			{
+				scndpass = ++i % BUFFER_SIZE;
+//									printf("--CT = %i, SCN = %i --\n", ct, scndpass);
+				return (ct);
+			}
 		}
 	}
-	return (ct - scndpass);
+//									printf("******* Use ??? ********\n");
+	return (ct);
 }
 char	*get_next_line(int fd)
 {
@@ -188,6 +195,7 @@ char	*get_next_line(int fd)
 	lst = NULL;
 	hlst = &lst;
 	i[0] = ft_charcount_fd(fd, hlst, lst);
+//							printf("---- ct = %i----\n", i[0]);
 	if (i[0])
 	{
 		buffer = ft_calloc(i[0] + 1, 1);
