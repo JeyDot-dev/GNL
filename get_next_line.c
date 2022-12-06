@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2022/12/05 01:43:14 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2022/12/06 01:27:02 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*ft_strdup(const char *s)
 	i = 0;
 	scpy = ft_calloc(BUFFER_SIZE + 1, 1);
 	if (!scpy)
-		return (scpy);
+		return (NULL);
 	while (s[i])
 	{
 		scpy[i] = s[i];
@@ -123,6 +123,12 @@ int	postnl(char *buffer)
 		return (-1);
 	return (i);
 }
+int	notfirst(void)
+{
+	static int	i = -1;
+
+	return (++i);
+}
 int		ft_charcount_fd(int fd, t_list **hlst, t_list *lst)
 {
 	int	ct;
@@ -135,7 +141,7 @@ int		ft_charcount_fd(int fd, t_list **hlst, t_list *lst)
 	ct = 0;
 	check = 1;
 	scndpass = 0;
-	if (*buffct)
+	if (notfirst() && *buffct)
 		check = -42;
 //								printf("-- buffct = %s\n", buffct);
 	while (check > 0 || check == -42)
@@ -172,7 +178,7 @@ int		ft_charcount_fd(int fd, t_list **hlst, t_list *lst)
 char	*get_next_line(int fd)
 {
 	int		i[3];
-	static char	*buffer;
+	char	*buffer;
 	char	*lel;
 	t_list	*lst;
 	t_list	**hlst;
@@ -183,9 +189,11 @@ char	*get_next_line(int fd)
 	hlst = &lst;
 	i[0] = ft_charcount_fd(fd, hlst, lst);
 	if (i[0])
+	{
 		buffer = ft_calloc(i[0] + 1, 1);
-	if (!buffer)
-		return (NULL);
+		if (!buffer)
+			return (NULL);
+	}
 	lst = *hlst;
 //							printf("i[0] = %i\n", i[0]);
 	while (i[2] < i[0])

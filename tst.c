@@ -17,4 +17,19 @@ int	main(void)
 	printf("%s", get_next_line(test));
 	printf("%s", get_next_line(test));
 	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
+	printf("%s", get_next_line(test));
 }
