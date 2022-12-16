@@ -60,5 +60,4 @@ int	main(void)
 	printf("o/:%s", get_next_line(test));
 	printf("o/:%s", get_next_line(test));
 	printf("o/:%s", get_next_line(test));
-	printf("o/:%s", get_next_line(test));
 }
