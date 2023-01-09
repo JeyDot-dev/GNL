@@ -12,18 +12,12 @@
 
 #ifndef GET_NEXT_LINE_H
 //TODO buffer size to remove
-//					#define BUFFER_SIZE 3
+# define BUFFER_SIZE 3
 # define GET_NEXT_LINE_H
 
 # include <unistd.h>
 # include <stdlib.h>
 //TODO all includes below to remove
-
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}					t_list;
 
 # include <stdio.h>
 # include <sys/types.h>
