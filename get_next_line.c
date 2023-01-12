@@ -6,10 +6,26 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/01/12 15:59:49 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/01/12 16:38:42 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
+
+char	*g_calloc(int ct)
+{
+	char	*ptr;
+	int		i;
+
+	if (ct < 1)
+		return (NULL);
+	ptr = malloc(ct);
+	if (!ptr)
+		return (NULL);
+	i = 0;
+	while (i < ct)
+		ptr[i++] = 0;
+	return (ptr);
+}
 int	g_strlen(char *str)
 {
 	int	i;
@@ -35,7 +51,7 @@ char *g_strdup_free(char *str)
 		free(str);
 		return (NULL);
 	}
-	cpy = malloc(sizeof(char) * (len + 1));
+	cpy = g_calloc(sizeof(char) * (len + 1));
 	if (!cpy)
 		return (NULL);
 	while (str[i])
@@ -43,7 +59,6 @@ char *g_strdup_free(char *str)
 		cpy[i] = str[i];
 		i++;
 	}
-	cpy[i] = 0;
 	free(str);
 //									printf("strdup CPY = %s\n", cpy);
 	return (cpy);
@@ -71,7 +86,7 @@ char *g_cat(char *sttc_str, char *buffer, int read_ct)
 		return (sttc_str);
 	i[0] = 0;
 	i[1] = 0;
-	newstr = malloc(sizeof(char) * g_strlen(sttc_str) + read_ct + 1);
+	newstr = g_calloc(sizeof(char) * g_strlen(sttc_str) + read_ct + 1);
 	if (!newstr)
 		return (NULL);
 	while (sttc_str && sttc_str[i[0]])
@@ -81,9 +96,8 @@ char *g_cat(char *sttc_str, char *buffer, int read_ct)
 	}
 	while (i[1] < read_ct)
 		newstr[i[0]++] = buffer[i[1]++];
-	newstr[i[0]] = 0;
-	free (buffer);
-//										printf("******END OF G_CAT******\n");
+	free(buffer);
+										printf("******G_CAT RESULT : %s******\n", newstr);
 	return (newstr);
 }
 char	*g_cut_from_n(char *str)
@@ -99,7 +113,7 @@ char	*g_cut_from_n(char *str)
 	i = g_check_n(str) + 1;
 	len = g_strlen(str);
 	if (i <= len)
-		temp = malloc(sizeof(char) * (len + 1 - i));
+		temp = g_calloc(sizeof(char) * (len + 1 - i));
 	else
 		return (NULL);
 	if (!temp)
@@ -125,7 +139,7 @@ char	*g_cut_to_n(char *str)
 		return (NULL);
 	i[0] = g_check_n(str);
 	if (i[0] + 1 <= g_strlen(str))
-		newstr = malloc(sizeof(char) * (i[0] + 2));
+		newstr = g_calloc(sizeof(char) * (i[0] + 2));
 	else
 		return (NULL);
 	if (!newstr)
@@ -133,7 +147,6 @@ char	*g_cut_to_n(char *str)
 	i[1] = -1;
 	while (++i[1] <= i[0])
 		newstr[i[1]] = str[i[1]];
-	newstr[i[1]] = 0;
 //										printf("---g_cut_to result : %s\n", newstr);
 	return (newstr);
 }
@@ -146,22 +159,25 @@ char	*get_line(int fd)
 	ssize_t		read_ct;
 
 	read_ct = BUFFER_SIZE;
+									printf("\n--STTC START : %s\n\n", sttc_str);
 	if (g_check_n(sttc_str) >= 0)
 	{
-//									printf("-----TEST------\n");
+									printf("\n-----STTC(NO READ) = %s------\n\n", sttc_str);
 		str_return = g_cut_to_n(sttc_str);
 		sttc_str = g_cut_from_n(sttc_str);
 		return (str_return);
 	}
-	buffer = malloc(sizeof(char) * (read_ct + 1));
+									printf("pre-g_calloc\n");
+	buffer = g_calloc(sizeof(char) * (BUFFER_SIZE + 1));
+									printf("post-g_calloc\n");
 	if (!buffer)
 		return (NULL);
-	buffer[BUFFER_SIZE] = 0;
 	//TODO check condition
 	while (read_ct == BUFFER_SIZE)
 	{
 		read_ct = read(fd, buffer, BUFFER_SIZE);
-//									printf("...Bytes read : %i...\n", read_ct);
+									printf("\n...Bytes read : %li...\n", read_ct);
+									printf("\n--BUFFER VALUE : %s\n", buffer);
 /*		if (read_ct == -1)
 		{
 			free(buffer);
@@ -173,8 +189,7 @@ char	*get_line(int fd)
 //									printf("-----BEFORE G_CAT------\n");
 			sttc_str = g_cat(sttc_str, buffer, read_ct);
 		}
-//									printf("\n--STTC VALUE : %s\n", sttc_str);
-//									printf("\n--BUFFER VALUE : %s\n", buffer);
+									printf("\n--STTC POST_CAT : %s\n\n", sttc_str);
 		if (g_check_n(sttc_str) >= 0)
 		{
 			str_return = g_cut_to_n(sttc_str);
@@ -206,9 +221,9 @@ char	*get_next_line(int fd)
 /*int	main(void)
 {
 //	char *str1;
-//	str1 = malloc(1);
+//	str1 = g_calloc(1);
 	char *str2;
-	str2 = malloc(6);
+	str2 = g_calloc(6);
 	str2[0] = 'X';
 	str2[1] = 'A';
 	str2[2] = '\n';
