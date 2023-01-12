@@ -6,13 +6,13 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:24:23 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/01/11 07:17:57 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/01/12 14:35:22 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 //TODO buffer size to remove
-# define BUFFER_SIZE 42
+//# define BUFFER_SIZE 1000000
 # define GET_NEXT_LINE_H
 
 # include <unistd.h>
