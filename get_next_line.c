@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/01/12 22:02:24 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/01/13 13:31:45 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -91,7 +91,8 @@ char *g_cat(char *sttc_str, char *buffer, int read_ct)
 	}
 	while (i[1] < read_ct)
 		newstr[i[0]++] = buffer[i[1]++];
-//	free(buffer);
+	if (sttc_str)
+		free(sttc_str);
 //										printf("******G_CAT RESULT : %s******\n", newstr);
 	return (newstr);
 }
