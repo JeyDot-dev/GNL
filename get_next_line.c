@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/01/14 16:55:39 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/01/14 18:02:09 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -21,7 +21,7 @@ char	*g_calloc(int ct)
 	char	*ptr;
 	int		i;
 
-	if (ct < 1)
+	if (ct < 2)
 		return (NULL);
 	ptr = malloc(ct);
 	if (!ptr)
@@ -61,7 +61,7 @@ char *g_strdup(char *str)
 		cpy[i] = str[i];
 		i++;
 	}
-	str = (g_free(str));
+//	free(str);
 //									printf("strdup CPY = %s\n", cpy);
 	return (cpy);
 }
@@ -147,6 +147,7 @@ char	*g_cut_to_n(char *str)
 	i[1] = -1;
 	while (++i[1] <= i[0])
 		newstr[i[1]] = str[i[1]];
+//	free(str);
 //										printf("---g_cut_to result : %s\n", newstr);
 	return (newstr);
 }
@@ -165,8 +166,7 @@ char	*get_line(int fd, char *sttc_str)
 		if (read_ct == -1)
 		{
 			free(buffer);
-			if (sttc_str)
-				sttc_str = g_free(sttc_str);
+			free(sttc_str);
 			return (NULL);
 		}
 		if (read_ct > 0)
