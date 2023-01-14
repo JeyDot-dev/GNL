@@ -6,10 +6,15 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/01/13 13:31:45 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/01/14 16:55:39 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
+char *g_free(char *str)
+{
+	free(str);
+	return (NULL);
+}
 
 char	*g_calloc(int ct)
 {
@@ -56,6 +61,7 @@ char *g_strdup(char *str)
 		cpy[i] = str[i];
 		i++;
 	}
+	str = (g_free(str));
 //									printf("strdup CPY = %s\n", cpy);
 	return (cpy);
 }
@@ -92,7 +98,7 @@ char *g_cat(char *sttc_str, char *buffer, int read_ct)
 	while (i[1] < read_ct)
 		newstr[i[0]++] = buffer[i[1]++];
 	if (sttc_str)
-		free(sttc_str);
+		sttc_str = g_free(sttc_str);
 //										printf("******G_CAT RESULT : %s******\n", newstr);
 	return (newstr);
 }
@@ -150,23 +156,23 @@ char	*get_line(int fd, char *sttc_str)
 	ssize_t		read_ct;
 
 	read_ct = BUFFER_SIZE;
+	buffer = g_calloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (NULL);
 	while (read_ct == BUFFER_SIZE && g_check_n(sttc_str) < 0)
 	{
-		buffer = g_calloc(sizeof(char) * (BUFFER_SIZE + 1));
-		if (!buffer)
-			return (NULL);
 		read_ct = read(fd, buffer, BUFFER_SIZE);
 		if (read_ct == -1)
 		{
 			free(buffer);
 			if (sttc_str)
-				free(sttc_str);
+				sttc_str = g_free(sttc_str);
 			return (NULL);
 		}
 		if (read_ct > 0)
 			sttc_str = g_cat(sttc_str, buffer, read_ct);
-		free (buffer);
 	}
+	free (buffer);
 	if (sttc_str && *sttc_str)
 		return (sttc_str);
 	return (NULL);
@@ -188,14 +194,10 @@ char	*get_next_line(int fd)
 		temp = g_cut_from_n(sttc_str);
 		free(sttc_str);
 		sttc_str = temp;
-		return (to_ret);
 	}
 	else
-	{
 		to_ret = g_strdup(sttc_str);
-		free (sttc_str);
-		return (to_ret);
-	}
+	return (to_ret);
 }
 /*int	main(void)
 {
