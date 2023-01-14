@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/01/14 18:04:28 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/01/14 18:18:58 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -40,7 +40,7 @@ int	g_strlen(char *str)
 		i++;
 	return (i);
 }
-char *g_strdup(char *str)
+/*char *g_strdup(char *str)
 {
 	char	*cpy;
 	int		i;
@@ -64,7 +64,7 @@ char *g_strdup(char *str)
 	free(str);
 //									printf("strdup CPY = %s\n", cpy);
 	return (cpy);
-}
+}*/
 int	g_check_n(char *str)
 {
 	int	i;
@@ -196,7 +196,8 @@ char	*get_next_line(int fd)
 		sttc_str = temp;
 	}
 	else
-		to_ret = g_strdup(sttc_str);
+		return (sttc_str);
+//		to_ret = g_strdup(sttc_str);
 	return (to_ret);
 }
 /*int	main(void)
