@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/01/14 18:02:09 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/01/14 18:04:28 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -61,7 +61,7 @@ char *g_strdup(char *str)
 		cpy[i] = str[i];
 		i++;
 	}
-//	free(str);
+	free(str);
 //									printf("strdup CPY = %s\n", cpy);
 	return (cpy);
 }
