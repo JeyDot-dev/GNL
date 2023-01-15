@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/01/15 18:44:44 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/01/15 21:24:48 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -57,24 +57,27 @@ char *g_getline(char *sttc_str)
 {
 	char	*line;
 	int		n_ct;
+	int		len;
 	int		i;
 
 	if (!sttc_str || !*sttc_str)
 		return (NULL);
 	n_ct = g_check_n(sttc_str);
+	len = g_strlen(sttc_str);
 	if (n_ct >= 0)
 		line = g_calloc(sizeof(char) * (n_ct + 2));
 	else
-		line = g_calloc(sizeof(char) * (g_strlen(sttc_str) + 1));
+		line = g_calloc(sizeof(char) * (len + 1));
 	if (!line)
 		return (NULL);
 	i = 0;
-	while (sttc_str[i] && sttc_str[i] != '\n')
+	while (sttc_str[i])
 	{
 		line[i] = sttc_str[i];
+		if (sttc_str[i] == '\n')
+			break ;
 		i++;
 	}
-	line[i] = '\n';
 //										printf("\nLINE = %s\n", line);
 	return (line);
 }
@@ -92,7 +95,6 @@ char *g_trim(char *sttc_str)
 	i = g_strlen(sttc_str);
 	if ((from_n >= 1 && (i - from_n) > 0)) //(len > 0, len - n > 0)
 		cpy = g_calloc(sizeof(char) * (i - from_n + 1));
-//							printf("\n--CPY = %s---\n", cpy);
 	else
 		return (g_free(sttc_str));
 	if (!cpy)
@@ -128,6 +130,7 @@ char *g_cat(char *sttc_str, char *buffer, int ct_count)
 		cpy[i++] = buffer[j++];
 	}
 	free(sttc_str);
+//								printf("CPY = %s", cpy);
 	return (cpy);
 }
 char *g_readfile(int fd, char *sttc_str)
@@ -143,7 +146,7 @@ char *g_readfile(int fd, char *sttc_str)
 	if (!buffer)
 		return (g_free(sttc_str));
 	ct_read = BUFFER_SIZE;
-	while (ct_read == BUFFER_SIZE)
+	while (ct_read > 0)
 	{
 		ct_read = read(fd, buffer, BUFFER_SIZE);
 //										printf("***ct_read = %i***\n", ct_read);
