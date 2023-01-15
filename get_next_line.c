@@ -6,7 +6,7 @@
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/01/15 14:20:11 by jsousa-a         ###   ########.fr       */
+/*   Updated: 2023/01/15 18:44:44 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -90,17 +90,17 @@ char *g_trim(char *sttc_str)
 		return (g_free(sttc_str));
 	from_n = g_check_n(sttc_str) + 1;
 	i = g_strlen(sttc_str);
-	if (from_n >= 1 && from_n - i > 0)
+	if ((from_n >= 1 && (i - from_n) > 0)) //(len > 0, len - n > 0)
 		cpy = g_calloc(sizeof(char) * (i - from_n + 1));
+//							printf("\n--CPY = %s---\n", cpy);
 	else
-		cpy = g_calloc(sizeof(char) * (i + 1));
+		return (g_free(sttc_str));
 	if (!cpy)
 		return (g_free(sttc_str));
 	i = 0;
 	while (sttc_str[from_n])
 		cpy[i++] = sttc_str[from_n++];
 	free(sttc_str);
-//										printf("\n--CPY = %s---\n", cpy);
 	return (cpy);
 }
 char *g_cat(char *sttc_str, char *buffer, int ct_count)
@@ -127,6 +127,7 @@ char *g_cat(char *sttc_str, char *buffer, int ct_count)
 	{
 		cpy[i++] = buffer[j++];
 	}
+	free(sttc_str);
 	return (cpy);
 }
 char *g_readfile(int fd, char *sttc_str)
@@ -167,9 +168,12 @@ char	*get_next_line(int fd)
 	if (BUFFER_SIZE < 1 || fd < 0)
 		return (NULL);
 	sttc_str = g_readfile(fd, sttc_str);
+//									printf("STCC = %s\n", sttc_str);
 	if (!sttc_str)
 		return (NULL);
 	to_ret = g_getline(sttc_str);
+//									printf("TO_RET = %s\n", to_ret);
 	sttc_str = g_trim(sttc_str);
+//									printf("STCC = %s\n", sttc_str);
 	return (to_ret);
 }
