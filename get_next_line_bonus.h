@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/03 20:24:23 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/01/13 09:37:21 by jsousa-a         ###   ########.fr       */
+/*   Created: 2023/01/17 14:56:37 by jsousa-a          #+#    #+#             */
+/*   Updated: 2023/01/17 14:58:05 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
 //TODO buffer size to remove
 //# define BUFFER_SIZE 65
-# define GET_NEXT_LINE_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <unistd.h>
 # include <stdlib.h>

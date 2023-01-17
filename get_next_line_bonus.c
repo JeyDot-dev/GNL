@@ -1,15 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsousa-a <jsousa-a@student.42lausanne.ch>  +#+  +:+       +#+        */
+/*   By: jsousa-a <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/03 20:23:20 by jsousa-a          #+#    #+#             */
-/*   Updated: 2023/01/15 21:24:48 by jsousa-a         ###   ########.fr       */
+/*   Created: 2023/01/17 14:46:10 by jsousa-a          #+#    #+#             */
+/*   Updated: 2023/01/17 14:57:32 by jsousa-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*g_getline(char *sttc_str)
 {
@@ -123,15 +123,15 @@ char	*g_readfile(int fd, char *sttc_str)
 
 char	*get_next_line(int fd)
 {
-	static char	*sttc_str;
+	static char	*sttc_str[4096];
 	char		*to_ret;
 
 	if (BUFFER_SIZE < 1 || fd < 0)
 		return (NULL);
-	sttc_str = g_readfile(fd, sttc_str);
-	if (!sttc_str)
+	sttc_str[fd] = g_readfile(fd, sttc_str[fd]);
+	if (!sttc_str[fd])
 		return (NULL);
-	to_ret = g_getline(sttc_str);
-	sttc_str = g_trim(sttc_str);
+	to_ret = g_getline(sttc_str[fd]);
+	sttc_str[fd] = g_trim(sttc_str[fd]);
 	return (to_ret);
 }
